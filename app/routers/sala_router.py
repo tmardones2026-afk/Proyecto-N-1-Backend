@@ -1,9 +1,12 @@
 """
 Router de Sala: define las URIs y delega la lógica al service.
 """
-from fastapi import APIRouter, status
+from typing import Optional, Literal
 
-from app.schemas.dtos import SalaCreate, SalaOut
+from fastapi import APIRouter, status, Query
+
+from app.domain.entities import EstadoSala
+from app.schemas.dtos import SalaCreate, SalaOut, SalaPaginada
 from app.services import sala_service
 
 router = APIRouter(prefix="/salas", tags=["Salas"])
@@ -14,9 +17,15 @@ def crear_sala(data: SalaCreate):
     return sala_service.crear_sala(data)
 
 
-@router.get("", response_model=list[SalaOut])
-def listar_salas():
-    return sala_service.listar_salas()
+@router.get("", response_model=SalaPaginada)
+def listar_salas(
+    estado: Optional[EstadoSala] = Query(None, description="Filtra por estado de la sala"),
+    ordenar_por: Literal["id", "nombre", "capacidad", "ubicacion", "estado"] = Query("id"),
+    direccion: Literal["asc", "desc"] = Query("asc"),
+    pagina: int = Query(1, ge=1),
+    limite: int = Query(20, ge=1, le=100),
+):
+    return sala_service.listar_salas(estado, ordenar_por, direccion, pagina, limite)
 
 
 @router.get("/{sala_id}", response_model=SalaOut)
