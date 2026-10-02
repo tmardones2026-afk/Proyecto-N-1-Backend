@@ -75,3 +75,11 @@ class ReservaCreate(BaseModel):
 class ReservaOut(ReservaCreate):
     id: int
     estado: EstadoReserva
+class SalaPaginada(BaseModel):
+    items: list[SalaOut]
+    total: int
+    pagina: int
+    limite: int
+    total_paginas: int
+
+    
