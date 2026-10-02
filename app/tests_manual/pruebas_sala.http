@@ -1,0 +1,50 @@
+### Sistema de Reservas de Salas y Laboratorios
+### Pruebas manuales del CRUD de Sala + filtrado, orden y paginación
+### Base URL: http://127.0.0.1:8000
+
+### 1. Crear Sala - Caso exitoso
+POST http://127.0.0.1:8000/salas
+Content-Type: application/json
+
+{
+  "nombre": "Sala A1",
+  "capacidad": 6,
+  "ubicacion": "Piso 1"
+}
+
+### Resultado esperado: 201 Created, devuelve la sala con id y estado "disponible"
+
+### 2. Crear otra Sala - Caso exitoso
+POST http://127.0.0.1:8000/salas
+Content-Type: application/json
+
+{
+  "nombre": "Laboratorio C1",
+  "capacidad": 20,
+  "ubicacion": "Piso 3"
+}
+
+### Resultado esperado: 201 Created
+
+### 3. Listar Salas con filtro, orden y paginación
+GET http://127.0.0.1:8000/salas?estado=disponible&ordenar_por=capacidad&direccion=desc&pagina=1&limite=20
+
+### Resultado esperado: 200 OK, estructura {items, total, pagina, limite, total_paginas},
+### salas ordenadas de mayor a menor capacidad
+
+### 4. Obtener Sala por ID - Caso exitoso
+GET http://127.0.0.1:8000/salas/1
+
+### Resultado esperado: 200 OK, devuelve los datos de la sala
+
+### 5. Obtener Sala - Caso de error (ID inexistente)
+GET http://127.0.0.1:8000/salas/9999
+
+### Resultado esperado: recurso no encontrado.
+### Nota: actualmente devuelve 400 con code "BUSINESS_RULE_VIOLATION" en vez de 404.
+### Pendiente de revisar con el grupo el manejador de errores global (main.py).
+
+### 6. Eliminar Sala - Caso exitoso
+DELETE http://127.0.0.1:8000/salas/1
+
+### Resultado esperado: 204 No Content
