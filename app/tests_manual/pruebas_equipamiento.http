@@ -1,0 +1,26 @@
+### Pruebas manuales - Equipamiento
+### Sistema de Reservas de Salas y Laboratorios
+
+### 1. Crear Equipamiento - Caso exitoso
+POST http://127.0.0.1:8000/equipamientos
+Content-Type: application/json
+
+{
+  "nombre": "Proyector Epson",
+  "tipo": "proyector",
+  "sala_id": 3
+}
+
+### Resultado esperado: 201 Created, estado: "disponible"
+
+### 2. Listar Equipamientos
+GET http://127.0.0.1:8000/equipamientos
+
+### Resultado esperado: 200 OK, lista de equipamientos
+
+### 3. Actualizar Estado de Equipamiento
+PATCH http://127.0.0.1:8000/equipamientos/1/estado?nuevo_estado=danado
+
+### Resultado esperado: 200 OK, estado cambia a "danado"
+### Resultado obtenido: 200 OK ✅
+### Nota: el endpoint usa un parámetro de query (nuevo_estado), no un cuerpo JSON

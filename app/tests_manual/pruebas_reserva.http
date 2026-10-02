@@ -1,0 +1,27 @@
+### 3. Crear Reserva - Caso CRÍTICO (traslape con la reserva del punto 1, ya confirmada)
+POST http://127.0.0.1:8000/reservas
+Content-Type: application/json
+
+{
+  "usuario_id": 1,
+  "sala_id": 3,
+  "fecha_inicio": "2026-10-05T10:30:00",
+  "fecha_fin": "2026-10-05T11:30:00"
+}
+
+### Resultado esperado: 409 Conflict (requisito P7 de la problemática)
+### Resultado obtenido: 400 Bad Request, code "BUSINESS_RULE_VIOLATION" ⚠️
+### HALLAZGO 1: la validación solo compara contra reservas CONFIRMADAS, no contra pendientes
+###   (al traslapar contra la reserva 1 en estado "pendiente", no dio error; 
+###    recién dio error después de confirmarla con PATCH /reservas/1/confirmar)
+### HALLAZGO 2: el código de estado es 400, no 409 como exige el criterio P7.
+###   Pendiente de decidir con el grupo si se ajusta el código de estado a 409
+###   y si se debe validar también contra reservas pendientes.
+
+
+### 4. Listar Reservas
+GET http://127.0.0.1:8000/reservas
+
+### Resultado esperado: 200 OK, lista de reservas, con filtro/orden/paginación
+### Resultado obtenido: 200 OK ✅ (bug corregido: se agregó from_attributes=True 
+###   en ReservaOut.model_validate() dentro de reserva_router.py)

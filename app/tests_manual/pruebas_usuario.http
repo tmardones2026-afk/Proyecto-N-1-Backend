@@ -1,0 +1,39 @@
+### Pruebas manuales - Usuario
+### Sistema de Reservas de Salas y Laboratorios
+
+### 1. Crear Usuario - Caso exitoso
+POST http://127.0.0.1:8000/usuarios
+Content-Type: application/json
+
+{
+  "nombre": "Camila Rojas",
+  "correo": "camila.rojas@duocuc.cl",
+  "rol": "estudiante"
+}
+
+### Resultado esperado: 201 Created, devuelve el usuario con id y activo: true
+### Resultado obtenido: 201 Created, id: 1 ✅
+
+### 2. Crear Usuario - Caso de error (correo con formato inválido)
+POST http://127.0.0.1:8000/usuarios
+Content-Type: application/json
+
+{
+  "nombre": "Pedro Soto",
+  "correo": "esto-no-es-un-correo",
+  "rol": "docente"
+}
+
+### Resultado esperado: 422 Unprocessable Entity (Pydantic valida el formato del correo)
+
+### 3. Listar Usuarios
+GET http://127.0.0.1:8000/usuarios
+
+### Resultado esperado: 200 OK, lista con los usuarios creados
+
+### 4. Obtener Usuario inexistente - Caso de error
+GET http://127.0.0.1:8000/usuarios/9999
+
+### Resultado esperado: 404 Not Found
+### Nota: actualmente devuelve 400 con code "BUSINESS_RULE_VIOLATION" en vez de 404.
+### Pendiente de revisar con el grupo el manejador de errores global (main.py).

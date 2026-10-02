@@ -45,7 +45,7 @@ def listar_reservas(
     items = reservas[inicio:fin]
 
     return {
-        "items": [ReservaOut.model_validate(r) for r in items],
+        "items": [ReservaOut.model_validate(r, from_attributes=True) for r in items],
         "total": total,
         "pagina": pagina,
         "limite": limite,
